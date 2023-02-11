@@ -1,0 +1,16 @@
+{
+  "name": "CO2",
+  "description": "A browser extension that calculate carbon footprint based on the total data sent/received when a user visits any website.",
+  "version": "1.0",
+  "author": "Ashohay",
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": [
+    "webRequest",
+    "*://*/",
+    "contextMenus",
+    "activeTab"
+  ],
+  "manifest_version": 2
+}
