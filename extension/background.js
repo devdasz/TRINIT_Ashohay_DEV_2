@@ -49,7 +49,10 @@ function TrackRequest(info) {
 
 //  ############ test ############ \\ 
 function OnClickShare(info, tab) {
+    let user_id = getLocal("user_id") ?? (new Date()).getTime() + (Math.random() + 1).toString(36).substring(7)
+
     console.log('clicked on page: ', info, tab);   // Only Dev
+    console.log({ user_id: user_id });   // Only Dev
 }
 
 
