@@ -7,10 +7,10 @@ const webUsageDetails = mongoose.Schema(
 
         url: {
             type: String,
-            required: [true, "role is Required"],
-            trim: true,
-            text: true,
-            unique:true,
+            // required: [true, "url is Required"],
+            // trim: true,
+            // text: true,
+            // unique:true,
         },
         usageList :{
             type:Array
