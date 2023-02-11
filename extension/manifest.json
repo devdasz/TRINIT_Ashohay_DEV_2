@@ -4,13 +4,15 @@
   "version": "1.0",
   "author": "Ashohay",
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["background.js","api_call.js"]
   },
   "permissions": [
     "webRequest",
     "*://*/",
     "contextMenus",
-    "activeTab"
+    "activeTab",
+    "tabs",
+    "storage"
   ],
   "manifest_version": 2
 }
