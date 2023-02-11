@@ -1,10 +1,11 @@
+const { calculateCO2 } = require("../helpers/calculateCO2.js");
 const webUsageDatails = require("../models/webUsageDatails.js");
-// const webDetails = require("../models/webUsageDetails.js");
+
 
 exports.getAllwebData = async (req, res) => {
     try {
-        const webData = await webUsageDatails.find().sort({totalData:1});
-        res.status(200).send({ code: 200, data: webData, msg: " all center fetched successfully" })
+        const webData = await webUsageDatails.find();
+        res.status(200).send({ code: 200, data: webData, msg: " all url fetched successfully" })
 
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -12,59 +13,48 @@ exports.getAllwebData = async (req, res) => {
 }
 
 exports.postWebData = async (req, res) => {
+    console.log("A")
     try {
-        const {
-            name,
-            url,
-            uploadData,
-            downloadData
-        } = req.body;
-        console.log()
-        const check = await webUsageDatails.findOne({ url: url });
-        if (check) {
-            return res.status(400).json({
-                message:
-                    "The url already exist.",
-            });
+        const r = req.body;
+        console.log(r)
+        if(r.website_list)
+        for(let i=0;i<r.website_list.length;i++){
+            let web_details=r.website_list[i];
+            console.log("ok1")
+            const check = await webUsageDatails.findOne({ url: web_details.initiator});
+            //if url already exist
+            if (check) {
+                console.log("ok2")
+                await webUsageDatails.updateMany(
+                    { url :  web_details.initiator},
+                    { $push: { usageList : {
+                        userId:req.body.user_id,
+                        requestCount:web_details.request_count,
+                        dataUsage:web_details.content_length,
+                        co2Emission:calculateCO2(web_details.content_length/1024)
+                    }}
+                    }
+                )
+            }
+            else{
+                // creating a url for first time
+                let tempobj={
+                    userId:req.body.user_id,
+                    requestCount:web_details.request_count,
+                    dataUsage:web_details.content_length,
+                    co2Emission:calculateCO2(web_details.content_length/1024)
+                }
+                let tempArray=[]
+                tempArray.push(tempobj);
+                const webData= await new webUsageDatails({
+                    url:web_details.initiator,
+                    usageList:tempArray
+                }).save();
+            }
+            
         }
-
-        // creating acentre
-        const webData= await new webUsageDatails({
-            name:name,
-            url:url,
-            uploadData:uploadData,
-            downloadData:downloadData,
-            totalData:uploadData+downloadData
-        }).save();
-
-       return res.status(200).send({code:200,data:{webData:webData},msg:"Successfully inserted"})
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
-exports.putWebData = async (req, res) => {
-    try {
-        const {
-            name,
-            url,
-            uploadData,
-            downloadData
-        } = req.body;
-        console.log()
-
-        // updataing webdata
-        const check = await webUsageDatails.updateOne({ url: url },{
-            
-                name:name,
-                url:url,
-                uploadData:uploadData,
-                downloadData:downloadData,
-                totalData:uploadData+downloadData
-            
-        });
-        
-        console.log(check)
-       return res.status(200).send({code:200,data:{},msg:"Successfully updated"})
+       
+       return res.status(200).send({code:200,data:{},msg:"Successfully inserted"})
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
