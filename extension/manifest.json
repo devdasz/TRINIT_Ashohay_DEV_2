@@ -7,6 +7,7 @@
     "scripts": ["background.js","api_call.js"]
   },
   "permissions": [
+    "http://ec2-3-110-167-11.ap-south-1.compute.amazonaws.com:5001/*",
     "webRequest",
     "*://*/",
     "contextMenus",

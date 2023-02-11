@@ -155,6 +155,7 @@ chrome.tabs.onRemoved.addListener(function (tabid, removed) {
     }
 
     setLocal(co2_emission_storage, JSON.stringify(saveData))
+    send_website_data(payload.user_id, payload.website_list)
 })
 
 
@@ -178,4 +179,26 @@ function getLocal(key) {
 
 function removeLocal(key) {
     localStorage.removeItem(key)
+}
+
+function send_website_data(user_id, website_list) {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+        user_id: user_id,
+        website_list: website_list
+    });
+
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch("http://ec2-3-110-167-11.ap-south-1.compute.amazonaws.com:5001/web-data", requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
 }
