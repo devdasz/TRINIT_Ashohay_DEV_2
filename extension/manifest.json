@@ -12,7 +12,7 @@
     "default_popup": "popup.html"
 },
   "permissions": [
-    "http://ec2-3-110-167-11.ap-south-1.compute.amazonaws.com:5001/*",
+    "http://ec2-3-110-167-11.ap-south-1.compute.amazonaws.com:5005/*",
     "webRequest",
     "*://*/",
     "contextMenus",

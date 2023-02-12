@@ -23,18 +23,26 @@ function TrackRequest(info) {
     // get initiator 
     let url = new URL(info.url)
     let request_count = 0
-    let domain = url.protocol + "//" + url.hostname
 
     if (info.type != 'main_frame' && lastMainUrl === "") {
         //    a request sent by browser, user did not initate
+        // console.log("We have found a exception")
+        // console.log(info.type);   // Only Dev
+        // console.log(lastMainUrl);   // Only Dev
         return
     }
+    // console.log(info.type);   // Only Dev
 
+    let domain
     if (info.type == 'main_frame') {
+        domain = url.protocol + "//" + url.hostname
         //either user's 1st initiate or url bar changed
         // need to change lastMain url as this is new visit
         lastMainUrl = domain
         request_count = 1
+    } else {
+        domain = lastMainUrl
+        request_count = 0
     }
 
     // if (info.type != 'main_frame') {
@@ -78,7 +86,7 @@ function TrackRequest(info) {
     if (!isMatch)
         domain_list.push(payload.initiator)
 
-    // console.log(domain_list);   // Only Dev
+    // console.log("domain_list: ", domain_list);   // Only Dev
 
     setLocal(domain_list_storage, JSON.stringify(domain_list))
 
@@ -153,7 +161,7 @@ chrome.tabs.onRemoved.addListener(function (tabid, removed) {
         //     "content_length": 310023,
         //     "last_update":11022023
         // }
-        let current_date = (new Date()).getDate() + 1;
+        let current_date = (new Date()).getDate();
         //incase new
         if (website_obj_index < 0) {
             saveData.website_list.push({
@@ -242,7 +250,7 @@ function send_website_data(user_id, website_list) {
         redirect: 'follow'
     };
 
-    fetch("http://ec2-3-110-167-11.ap-south-1.compute.amazonaws.com:5005/web-data", requestOptions)
+    fetch("http://ec2-3-110-167-11.ap-south-1.compute.amazonaws.com:5001/web-data", requestOptions)
         .then(response => response.text())
         .then(result => console.log(result))
         .catch(error => console.log('error', error));
