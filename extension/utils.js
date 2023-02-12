@@ -1,5 +1,6 @@
 const co2_emission_storage = "co2_emission";
 const domain_list_storage = "domain_list";
+const server_end_point = "http://ec2-3-110-167-11.ap-south-1.compute.amazonaws.com:5001";
 
 function get_co2_data() {
 

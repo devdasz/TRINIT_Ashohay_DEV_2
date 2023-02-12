@@ -1,4 +1,3 @@
-const server_end_point = "http://ec2-3-110-167-11.ap-south-1.compute.amazonaws.com:5001";
 
 function send_website_data(user_id, website_list) {
     var myHeaders = new Headers();
