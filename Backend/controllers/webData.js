@@ -6,20 +6,32 @@ exports.getAllwebData = async (req, res) => {
     try {
         const r = await webUsageDatails.find();
         let allWebData=[];
-        console.log(r)
+        // console.log(r)
+
+        // for all website
         for(let i=0;i<r.length;i++){
             let webData=r[i];
             console.log("webData--------",webData)
             let avgData=0;
             let noOfuser=webData.usageList.length;
            
+            // for all user in the website
             for(let j=0;j<noOfuser;j++){
                 let userinfo=webData.usageList[j]
-                console.log("userinfo......",userinfo)
-                avgData+=(userinfo.dataUsage/userinfo.requestCount);
+                // console.log("userinfo......",userinfo)
+                if(userinfo.requestCount)
+                  avgData+=(userinfo.dataUsage/userinfo.requestCount);
+                 else{
+                    avgData+=0;
+                 } 
             }
+
+            // calculating average
             avgData=(avgData/noOfuser).toFixed(4);
-           let type=null
+            console.log(avgData)
+            let type=null
+
+            // type of website based on carbon emission
             if(calculateCO2(avgData/1024)<1.7){
               type="Green"
             }
@@ -29,13 +41,16 @@ exports.getAllwebData = async (req, res) => {
               if(calculateCO2(avgData/1024)>2.7){
                 type="Non-Green"
               }
+
+              // push the object to the array for response
             allWebData.push({
                url:webData.url,
-               avgData:(avgData/1024).toFixed(4),
+               avgData:avgData?(avgData/1024).toFixed(4):0,
                noOfuser:noOfuser,
-               co2:calculateCO2(avgData/1024),
+               co2:avgData?calculateCO2(avgData/1024):0,
                type:type
             })
+
         }
         res.status(200).send({ code: 200, data: allWebData, msg: " all url fetched successfully" })
 

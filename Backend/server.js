@@ -22,10 +22,14 @@ mongoose
     .then(() => console.log("database connected successfully"))
     .catch((err) => console.log("error connecting to mongodb", err));
 
-
+app.use(express.static('public'))
+// testing
 app.get('/', (req, res) => res.send('Hello World!'))
 app.post('/', (req, res) => res.send(req.body))
+
+// create the webdata usage
 app.post('/web-data',postWebData)
+// get the web carbon uasage data
 app.get('/web-data',getAllwebData)
 
 
