@@ -69,6 +69,13 @@ h1{
 .openglobalbutton{
     text-align: end;
 }
+button{
+    margin-right: 20px;
+    padding: 10px;
+    background-color: white;
+    font-size: large;
+    border-radius: 8px;
+}
 
 /* On screens that are 600px or less, set the background color to olive */
 @media screen and (max-width: 600px) {
